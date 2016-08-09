@@ -91,6 +91,8 @@ namespace TweetsRecommender
                 sb.AppendLine("User Location:" + status.User.Location);
 
             }
+            if (!System.IO.Directory.Exists(@"C\bigdata"))
+                System.IO.Directory.CreateDirectory(@"C:\bigdata");
             System.IO.File.WriteAllText(@"C:\bigdata\bigdata.txt",sb.ToString());
             Console.ReadKey();
             
