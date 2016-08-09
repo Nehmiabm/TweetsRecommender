@@ -25,9 +25,21 @@ namespace TweetsRecommender
           
             service.AuthenticateWith(accessToken, accessTokenSecret);
 
-           var result = service.Search(new SearchOptions() {Q = "fairfield IA", Count = 100});
+            var result =
+                service.Search(new SearchOptions()
+                {
+                    Count = 1000,
+                    Geocode =
+                        new TwitterGeoLocationSearch()
+                        {
+                            Radius = 3,
+                            Coordinates =
+                                new TwitterGeoLocation.GeoCoordinates() {Latitude = 41.00688, Longitude = -91.967137}
+                        }
+                });
             foreach (TwitterStatus status in result.Statuses)
             {
+            
                 Console.WriteLine("==========================================================================");
                 Console.WriteLine("Author Screen Name:"+status.Author.ScreenName);
                 Console.WriteLine("Created Date:"+status.CreatedDate.ToLongDateString());
