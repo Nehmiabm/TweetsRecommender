@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using ikvm.extensions;
 using TweetSharp;
 
 namespace TweetsRecommender
@@ -112,7 +113,7 @@ namespace TweetsRecommender
 
                 weka.classifiers.Classifier cl = new weka.classifiers.trees.J48();
                 Console.WriteLine("Performing " + percentSplit + "% split evaluation.");
-
+               
                 //randomize the order of the instances in the dataset.
                 weka.filters.Filter myRandom = new weka.filters.unsupervised.instance.Randomize();
                 myRandom.setInputFormat(insts);
@@ -120,6 +121,13 @@ namespace TweetsRecommender
 
                 int trainSize = insts.numInstances() * percentSplit / 100;
                 int testSize = insts.numInstances() - trainSize;
+
+                Console.WriteLine("Scheme: "+cl.getClass());
+                Console.WriteLine("Relation: iris ");
+                Console.WriteLine("Instances: " + insts.numInstances());
+                Console.WriteLine("Attributes: " + insts.numAttributes());
+                Console.WriteLine("Train data instance: "+trainSize);
+                Console.WriteLine("Test data instance: "+testSize);
                 weka.core.Instances train = new weka.core.Instances(insts, 0, trainSize);
 
                 cl.buildClassifier(train);
@@ -133,6 +141,7 @@ namespace TweetsRecommender
                 }
                 Console.WriteLine(numCorrect + " out of " + testSize + " correct (" +
                            (double)((double)numCorrect / (double)testSize * 100.0) + "%)");
+                Console.ReadKey();
             }
             catch (java.lang.Exception ex)
             {
