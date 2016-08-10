@@ -37,6 +37,9 @@
       <HintPath>..\packages\TweetMoaSharp.3.0.0.19\lib\4.5\Hammock.ClientProfile.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="IKVM.OpenJDK.Core">
+      <HintPath>..\..\..\..\..\..\..\Courses\Bigdata\ikvm-7.2.4630.5\bin\IKVM.OpenJDK.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -56,6 +59,9 @@
     <Reference Include="TweetSharp, Version=3.0.0.1, Culture=neutral, PublicKeyToken=c148cfba29ed1a4d, processorArchitecture=MSIL">
       <HintPath>..\packages\TweetMoaSharp.3.0.0.19\lib\4.5\TweetSharp.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="weka">
+      <HintPath>..\..\..\..\..\..\..\Courses\Bigdata\ikvm-7.2.4630.5\bin\weka.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
