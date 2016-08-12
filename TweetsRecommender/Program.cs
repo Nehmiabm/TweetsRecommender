@@ -64,7 +64,7 @@ namespace TweetsRecommender
             var result =
                 service.Search(new SearchOptions()
                 {
-                    Count = 20, //Number of tweets
+                    Count = 50, //Number of tweets
                      Q = "#BlackLives"
                     //Geocode =
                     //    new TwitterGeoLocationSearch()
@@ -134,7 +134,7 @@ namespace TweetsRecommender
             if (!System.IO.Directory.Exists(@"C\bigdata"))
                 System.IO.Directory.CreateDirectory(@"C:\bigdata");
             System.IO.File.WriteAllText(@"C:\bigdata\bigdata.txt", sb.ToString());
-            System.IO.File.WriteAllText(@"C:\bigdata\tagslist.txt", tagBuilder.toString());
+            System.IO.File.WriteAllText(@"C:\bigdata\tagslist.txt", tagBuilder.toString(),Encoding.UTF8);
             Console.ReadKey();
         }
 
