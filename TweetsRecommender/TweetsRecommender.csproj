@@ -48,7 +48,14 @@
       <HintPath>..\packages\TweetMoaSharp.3.0.0.19\lib\4.5\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="OpenNLP">
+      <HintPath>References\OpenNLP.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpEntropy">
+      <HintPath>References\SharpEntropy.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -110,8 +117,38 @@
     <None Include="Models\Parser\tag.nbin" />
     <None Include="Models\Parser\tagdict" />
     <None Include="packages.config" />
+    <None Include="References\iris.arff" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="References\Hammock.ClientProfile.dll" />
+    <Content Include="References\IKVM.AWT.WinForms.dll" />
+    <Content Include="References\IKVM.OpenJDK.Beans.dll" />
+    <Content Include="References\IKVM.OpenJDK.Charsets.dll" />
+    <Content Include="References\IKVM.OpenJDK.Corba.dll" />
+    <Content Include="References\IKVM.OpenJDK.Core.dll" />
+    <Content Include="References\IKVM.OpenJDK.Jdbc.dll" />
+    <Content Include="References\IKVM.OpenJDK.Management.dll" />
+    <Content Include="References\IKVM.OpenJDK.Media.dll" />
+    <Content Include="References\IKVM.OpenJDK.Misc.dll" />
+    <Content Include="References\IKVM.OpenJDK.Naming.dll" />
+    <Content Include="References\IKVM.OpenJDK.Remoting.dll" />
+    <Content Include="References\IKVM.OpenJDK.Security.dll" />
+    <Content Include="References\IKVM.OpenJDK.SwingAWT.dll" />
+    <Content Include="References\IKVM.OpenJDK.Text.dll" />
+    <Content Include="References\IKVM.OpenJDK.Util.dll" />
+    <Content Include="References\IKVM.OpenJDK.XML.API.dll" />
+    <Content Include="References\IKVM.OpenJDK.XML.Bind.dll" />
+    <Content Include="References\IKVM.OpenJDK.XML.Parse.dll" />
+    <Content Include="References\IKVM.Runtime.dll" />
+    <Content Include="References\IKVM.Runtime.JNI.dll" />
+    <Content Include="References\Newtonsoft.Json.dll" />
+    <Content Include="References\nunit.framework.dll" />
+    <Content Include="References\OpenNLP.dll" />
+    <Content Include="References\SharpEntropy.dll" />
+    <Content Include="References\SharpEntropySqlite.dll" />
+    <Content Include="References\TweetSharp.dll" />
+    <Content Include="References\weka.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
