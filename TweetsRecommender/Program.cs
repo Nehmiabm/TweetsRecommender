@@ -14,9 +14,9 @@ namespace TweetsRecommender
     {
         static  void Main(string[] args)
         {
-            // Pass your credentials to the service
-          //  GenerateTweets();
-          ClassifyTest();
+           
+          GenerateTweets();
+         // ClassifyTest();
         }
 
         private static void GenerateTweets()
@@ -35,14 +35,15 @@ namespace TweetsRecommender
                 service.Search(new SearchOptions()
                 {
                     Count = 100, //Number of tweets
-                    Geocode =
-                        new TwitterGeoLocationSearch()
-                        {
-                            Radius = 1,
-                            Coordinates =
-                                new TwitterGeoLocation.GeoCoordinates()
-                                {Latitude = 41.00688, Longitude = -91.967137} //Search by geo location for Fairfield, IA
-                        }
+                    Q = "#BlackLives"
+                    //Geocode =
+                    //    new TwitterGeoLocationSearch()
+                    //    {
+                    //        Radius = 1,
+                    //        Coordinates =
+                    //            new TwitterGeoLocation.GeoCoordinates()
+                    //            {Latitude = 41.00688, Longitude = -91.967137} //Search by geo location for Fairfield, IA
+                    //    }
                 });
             foreach (TwitterStatus status in result.Statuses)
             {
