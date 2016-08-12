@@ -70,8 +70,48 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Models\EnglishChunk.nbin" />
+    <None Include="Models\EnglishPOS.nbin" />
+    <None Include="Models\EnglishSD.nbin" />
+    <None Include="Models\EnglishTok.nbin" />
+    <None Include="Models\Coref\acronyms" />
+    <None Include="Models\Coref\cmodel.nbin" />
+    <None Include="Models\Coref\cmodel_nr.nbin" />
+    <None Include="Models\Coref\defmodel.nbin" />
+    <None Include="Models\Coref\defmodel_nr.nbin" />
+    <None Include="Models\Coref\fmodel.nbin" />
+    <None Include="Models\Coref\fmodel_nr.nbin" />
+    <None Include="Models\Coref\gen.fem" />
+    <None Include="Models\Coref\gen.mal" />
+    <None Include="Models\Coref\gen.nbin" />
+    <None Include="Models\Coref\imodel.nbin" />
+    <None Include="Models\Coref\imodel_nr.nbin" />
+    <None Include="Models\Coref\num.nbin" />
+    <None Include="Models\Coref\plmodel.nbin" />
+    <None Include="Models\Coref\plmodel_nr.nbin" />
+    <None Include="Models\Coref\pmodel.nbin" />
+    <None Include="Models\Coref\pmodel_nr.nbin" />
+    <None Include="Models\Coref\pnmodel.nbin" />
+    <None Include="Models\Coref\pnmodel_nr.nbin" />
+    <None Include="Models\Coref\sim.nbin" />
+    <None Include="Models\Coref\tmodel.nbin" />
+    <None Include="Models\Coref\tmodel_nr.nbin" />
+    <None Include="Models\NameFind\date.nbin" />
+    <None Include="Models\NameFind\location.nbin" />
+    <None Include="Models\NameFind\money.nbin" />
+    <None Include="Models\NameFind\organization.nbin" />
+    <None Include="Models\NameFind\percentage.nbin" />
+    <None Include="Models\NameFind\person.nbin" />
+    <None Include="Models\NameFind\time.nbin" />
+    <None Include="Models\Parser\build.nbin" />
+    <None Include="Models\Parser\check.nbin" />
+    <None Include="Models\Parser\chunk.nbin" />
+    <None Include="Models\Parser\head_rules" />
+    <None Include="Models\Parser\tag.nbin" />
+    <None Include="Models\Parser\tagdict" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
