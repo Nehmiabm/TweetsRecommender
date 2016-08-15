@@ -52,11 +52,12 @@ namespace TweetsRecommender
         static void Main(string[] args)
         {
             _mongoConnector = new MongoConnector();
-           GenerateTweetsAndStore();
-           GenerateTweetsAndTag();
-          // AnalyzeTweetUsingPosTest("@mellie_me12009: The more you know...She was NOT crazy...");
+           // ProcessQuery();
+            GenerateTweetsAndStore();
+            //GenerateTweetsAndTag();
+            // AnalyzeTweetUsingPosTest("@mellie_me12009: The more you know...She was NOT crazy...");
             // ClassifyTest();
-           // AnalyzeTweetUsingPos("When I typed in the first part of the hashtag, #blacklives, this was #Twitter's first and only suggestion");
+            // AnalyzeTweetUsingPos("When I typed in the first part of the hashtag, #blacklives, this was #Twitter's first and only suggestion");
         }
 
         private static void GenerateTweetsAndStore()
@@ -290,6 +291,63 @@ namespace TweetsRecommender
 
         }
 
+
+        private static void ProcessQuery()
+        {
+            if (!System.IO.File.Exists(@"C:\bigdata\Sale.csv"))
+            {
+                Console.WriteLine("No file found to process query!");
+                Console.ReadKey();
+            }
+            else
+            {
+                List<Sale> saleList = new List<Sale>();
+                string line;
+                int lineCount = 0;
+                string path = @"C:\bigdata\Sale.csv";
+                System.IO.StreamReader file =
+                    new System.IO.StreamReader(path);
+                while ((line = file.ReadLine()) != null)
+                {
+                    //System.Console.WriteLine(line);
+                    if (lineCount > 0)
+                    {
+                        string[] cols = line.split(",");
+                        var sale = new Sale
+                        {
+                            OrderId = int.Parse(cols[0]),
+                            Date = DateTime.Parse(cols[1]),
+                            CustomerId = int.Parse(cols[2]),
+                            ProductId = cols[3],
+                            StoreId = cols[4],
+                            Quantity = double.Parse(cols[5]),
+                            Amount = double.Parse(cols[6])
+                        };
+                        saleList.Add(sale);
+                    }
+                    lineCount++;
+                }
+
+                //perform group by query on storeid and produtid for sum of quantity
+                var result = saleList
+                    .GroupBy(sl => new
+                    {
+                        sl.StoreId,
+                        sl.ProductId,
+                    })
+                    .Select(g =>
+                        new
+                        {
+                            sId = g.Key.StoreId,
+                            pId = g.Key.ProductId,
+                            qty = g.Sum(x => Math.Round(Convert.ToDecimal(x.Quantity), 2)),
+                        }
+                    );
+                   
+            }
+        }
+
+
         private static void AnalyzeTweetUsingPosTest(string tweet, TagType tagType = TagType.Noun)
         {
             try
@@ -309,7 +367,7 @@ namespace TweetsRecommender
                 Console.WriteLine("Building tags. Please wait this might take a while...");
 
                 int i = 0;
-                 int countTagged = 0;
+                int countTagged = 0;
                 foreach (string tag in tags)
                 {
                     if (tagType == TagType.Noun) //tag noun
@@ -317,7 +375,7 @@ namespace TweetsRecommender
                         if (tag.Equals(NN) || tag.Equals(NNP) || tag.Equals(NNPS) || tag.Equals(NNS))
                         {
                             tagBuilder.AppendLine(tokens[i]);
-                             countTagged++;
+                            countTagged++;
                         }
                     }
                     else //tag verb
@@ -351,6 +409,7 @@ namespace TweetsRecommender
             }
 
         }
+
 
         enum TagType
         {

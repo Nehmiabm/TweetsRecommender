@@ -40,4 +40,15 @@ namespace TweetsRecommender.Models
         public user user { get; set; }
         public twittedPlace twittedPlace { get; set; }
     }
+
+    public class Sale
+    {
+        public int OrderId { get; set; }
+        public DateTime Date { get; set; }
+        public int CustomerId { get; set; }
+        public string ProductId { get; set; }
+        public string StoreId { get; set; }
+        public double Quantity { get; set; }
+        public double Amount { get; set; }
+    }
 }
