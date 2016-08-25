@@ -53,8 +53,8 @@ namespace TweetsRecommender
         {
             _mongoConnector = new MongoConnector();
            // ProcessQuery();
-            GenerateTweetsAndStore();
-            //GenerateTweetsAndTag();
+            //GenerateTweetsAndStore();
+            GenerateTweetsAndTag();
             // AnalyzeTweetUsingPosTest("@mellie_me12009: The more you know...She was NOT crazy...");
             // ClassifyTest();
             // AnalyzeTweetUsingPos("When I typed in the first part of the hashtag, #blacklives, this was #Twitter's first and only suggestion");
@@ -71,15 +71,15 @@ namespace TweetsRecommender
                 service.Search(new SearchOptions()
                 {
                     Count = 50, //Number of tweets
-                     Q = "donald"
-                    //Geocode =
-                    //    new TwitterGeoLocationSearch()
-                    //    {
-                    //        Radius = 1,
-                    //        Coordinates =
-                    //            new TwitterGeoLocation.GeoCoordinates()
-                    //            {Latitude = 41.00688, Longitude = -91.967137} //Search by geo location for Fairfield, IA
-                    //    }
+                                //Q = "donald" 47.6062° N, 122.3321° W
+                    Geocode =
+                        new TwitterGeoLocationSearch()
+                        {
+                            Radius = 1,
+                            Coordinates =
+                                new TwitterGeoLocation.GeoCoordinates()
+                                { Latitude = 47.6062, Longitude = -122.3321 } //Search by geo location for Fairfield, IA
+                        }
                 });
 
             if (result.Statuses.Any())
@@ -155,16 +155,17 @@ namespace TweetsRecommender
             var result =
                 service.Search(new SearchOptions()
                 {
-                    Count = 50, //Number of tweets
-                    Q = "donald"
-                    //Geocode =
-                    //    new TwitterGeoLocationSearch()
-                    //    {
-                    //        Radius = 1,
-                    //        Coordinates =
-                    //            new TwitterGeoLocation.GeoCoordinates()
-                    //            {Latitude = 41.00688, Longitude = -91.967137} //Search by geo location for Fairfield, IA
-                    //    }
+                    //Count = 99, //Number of tweets
+                    //Q = "#trump" 
+                     
+                    Geocode =
+                        new TwitterGeoLocationSearch()
+                        {
+                            Radius = 50,
+                            Coordinates =
+                                new TwitterGeoLocation.GeoCoordinates()
+                                { Latitude = 38.5816, Longitude = -121.4944 } //Search by geo location for Fairfield, IA
+                        }
                 });
 
             
@@ -235,28 +236,28 @@ namespace TweetsRecommender
             {
 
                 //Tokenize tweet
-                
+
                 EnglishMaximumEntropyTokenizer tokenizer =
                     new EnglishMaximumEntropyTokenizer(modelPath + "EnglishTok.nbin");
                 string[] tokens = tokenizer.Tokenize(tweet);
-
+               var filteredTokens= FilterNoises(tokens);
                 //Tag tokens
                 EnglishMaximumEntropyPosTagger posTagger =
                     new EnglishMaximumEntropyPosTagger(modelPath + "EnglishPOS.nbin");
-                string[] tags = posTagger.Tag(tokens);
+                string[] tags = posTagger.Tag(filteredTokens);
                 //Console.WriteLine(tokens.Length + " tokens found.");
                 //Console.WriteLine("Building tags. Please wait this might take a while...");
-                
+
                 int i = 0;
-               // int countTagged = 0;
+                // int countTagged = 0;
                 foreach (string tag in tags)
                 {
                     if (tagType == TagType.Noun) //tag noun
                     {
-                        if (tag.Equals(NN) || tag.Equals(NNP) || tag.Equals(NNPS) || tag.Equals(NNS))
+                        if (tag.Equals(NN) || tag.Equals(NNS)) // || tag.Equals(NNP) || tag.Equals(NNPS)
                         {
-                            tagBuilder.AppendLine(tokens[i]);
-                           // countTagged++;
+                            tagBuilder.AppendLine(filteredTokens[i]);
+                            // countTagged++;
                         }
                     }
                     else //tag verb
@@ -264,8 +265,8 @@ namespace TweetsRecommender
                         if (tag.Equals(VB) || tag.Equals(VBD) || tag.Equals(VBG) || tag.Equals(VBN)
                             || tag.Equals(VBP) || tag.Equals(VBZ))
                         {
-                            tagBuilder.AppendLine(tokens[i]);
-                           // countTagged++;
+                            tagBuilder.AppendLine(filteredTokens[i]);
+                            // countTagged++;
                         }
                     }
                     i++;
@@ -291,6 +292,16 @@ namespace TweetsRecommender
 
         }
 
+        private static string[] FilterNoises(string[] tokens)
+        {
+            List<string> filtered=new List<string>();
+            foreach (String tag in tokens)
+            {
+                if (!tag.Contains("http") && !tag.Contains("@") && !tag.Contains("#"))
+                    filtered.Add(tag);
+            }
+            return filtered.ToArray();
+        }
 
         private static void ProcessQuery()
         {

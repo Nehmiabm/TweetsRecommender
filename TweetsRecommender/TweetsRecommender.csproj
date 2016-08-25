@@ -152,6 +152,9 @@
     <Content Include="References\IKVM.OpenJDK.XML.Parse.dll" />
     <Content Include="References\IKVM.Runtime.dll" />
     <Content Include="References\IKVM.Runtime.JNI.dll" />
+    <Content Include="References\MongoDB.Bson.dll" />
+    <Content Include="References\MongoDB.Driver.Core.dll" />
+    <Content Include="References\MongoDB.Driver.dll" />
     <Content Include="References\Newtonsoft.Json.dll" />
     <Content Include="References\nunit.framework.dll" />
     <Content Include="References\OpenNLP.dll" />
