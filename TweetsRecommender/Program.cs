@@ -5,8 +5,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ikvm.extensions;
+using Iveonik.Stemmers;
 using MongoDB.Bson;
 using TweetSharp;
 using OpenNLP.Tools;
@@ -41,6 +43,7 @@ namespace TweetsRecommender
         #endregion
 
         private static StringBuilder tagBuilder = new StringBuilder();
+        private static int wordIndex=0;
         private static string modelPath = ConfigurationManager.AppSettings["ModelPath"];
         private static MongoConnector _mongoConnector;
 
@@ -146,7 +149,8 @@ namespace TweetsRecommender
 
         private static void GenerateTweetsAndTag()
         {
-          
+
+            wordIndex = 0;
             TwitterService service = new TwitterService(consumerKey, consumerSecret);
             StringBuilder sb = new StringBuilder();
 
@@ -155,31 +159,45 @@ namespace TweetsRecommender
             var result =
                 service.Search(new SearchOptions()
                 {
-                    //Count = 99, //Number of tweets
-                    //Q = "#trump" 
-                     
-                    Geocode =
-                        new TwitterGeoLocationSearch()
-                        {
-                            Radius = 50,
-                            Coordinates =
-                                new TwitterGeoLocation.GeoCoordinates()
-                                { Latitude = 38.5816, Longitude = -121.4944 } //Search by geo location for Fairfield, IA
-                        }
+                    Count = 100, //Number of tweets
+                    Q = "#trump"
+
+                    //Geocode =
+                    //    new TwitterGeoLocationSearch()
+                    //    {
+                    //        Radius = 50,
+                    //        Coordinates =
+                    //            new TwitterGeoLocation.GeoCoordinates()
+                    //            { Latitude = 38.5816, Longitude = -121.4944 } //Search by geo location for Fairfield, IA
+                    //    }
                 });
 
-            
+
             foreach (TwitterStatus status in result.Statuses)
             {
                 if (status.Language.Equals("en"))
                 {
                     AnalyzeTweetUsingPos(status.Text);
-                    Console.WriteLine("Tweet Id:"+status.Id+" tagged successfully");
+                    Console.WriteLine("Tweet Id:" + status.Id + " tagged successfully");
                 }
             }
             if (!System.IO.Directory.Exists(@"C\bigdata"))
                 System.IO.Directory.CreateDirectory(@"C:\bigdata");
-            System.IO.File.WriteAllText(@"C:\bigdata\tagslist.txt", tagBuilder.toString(), Encoding.UTF8);
+
+            //Format vocabulary
+            string vocabulary = tagBuilder.toString();
+            string[] vocabs = vocabulary.split("\r\n");
+            List<string> s = vocabs.ToList();
+            s.Sort();
+          //  var distinctWords = s.Distinct();
+            StringBuilder strBuilder=new StringBuilder();
+            foreach (string str in s)
+            {
+                strBuilder.AppendLine(String.Concat(++wordIndex, "\t", str));
+            }
+           // var formatted = vocabs.Select(w => String.Concat(wordIndex++, "\t", w));
+            
+            System.IO.File.WriteAllText(@"C:\bigdata\vocabulary.txt", strBuilder.toString(), Encoding.UTF8);
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
@@ -236,7 +254,7 @@ namespace TweetsRecommender
             {
 
                 //Tokenize tweet
-
+               
                 EnglishMaximumEntropyTokenizer tokenizer =
                     new EnglishMaximumEntropyTokenizer(modelPath + "EnglishTok.nbin");
                 string[] tokens = tokenizer.Tokenize(tweet);
@@ -256,6 +274,7 @@ namespace TweetsRecommender
                     {
                         if (tag.Equals(NN) || tag.Equals(NNS)) // || tag.Equals(NNP) || tag.Equals(NNPS)
                         {
+                            //wordIndex++;
                             tagBuilder.AppendLine(filteredTokens[i]);
                             // countTagged++;
                         }
@@ -265,6 +284,7 @@ namespace TweetsRecommender
                         if (tag.Equals(VB) || tag.Equals(VBD) || tag.Equals(VBG) || tag.Equals(VBN)
                             || tag.Equals(VBP) || tag.Equals(VBZ))
                         {
+                           // wordIndex++;
                             tagBuilder.AppendLine(filteredTokens[i]);
                             // countTagged++;
                         }
@@ -294,11 +314,19 @@ namespace TweetsRecommender
 
         private static string[] FilterNoises(string[] tokens)
         {
-            List<string> filtered=new List<string>();
+            List<string> filtered = new List<string>();
             foreach (String tag in tokens)
             {
-                if (!tag.Contains("http") && !tag.Contains("@") && !tag.Contains("#"))
-                    filtered.Add(tag);
+                Regex r = new Regex("(?:[^a-z]|(?<=['\"])s)",
+                    RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+                string tmp = r.Replace(tag, String.Empty);
+                IStemmer stemmer = new EnglishStemmer();
+
+                if (!string.IsNullOrEmpty(tmp) && tmp.length() > 2 && !tmp.StartsWith("http") && !filtered.Contains(tmp))
+                {
+                    string stemmedWord = stemmer.Stem(tmp);
+                    filtered.Add(stemmedWord);
+                }
             }
             return filtered.ToArray();
         }
