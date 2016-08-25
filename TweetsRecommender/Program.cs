@@ -160,16 +160,16 @@ namespace TweetsRecommender
                 service.Search(new SearchOptions()
                 {
                     Count = 100, //Number of tweets
-                    Q = "#trump"
+                    //Q = "#trump"
 
-                    //Geocode =
-                    //    new TwitterGeoLocationSearch()
-                    //    {
-                    //        Radius = 50,
-                    //        Coordinates =
-                    //            new TwitterGeoLocation.GeoCoordinates()
-                    //            { Latitude = 38.5816, Longitude = -121.4944 } //Search by geo location for Fairfield, IA
-                    //    }
+                    Geocode =
+                        new TwitterGeoLocationSearch()
+                        {
+                            Radius = 50,
+                            Coordinates =
+                                new TwitterGeoLocation.GeoCoordinates()
+                                { Latitude = 38.9072, Longitude = -77.0369 } //Search by geo location for Fairfield, IA
+                        }
                 });
 
 
@@ -189,13 +189,11 @@ namespace TweetsRecommender
             string[] vocabs = vocabulary.split("\r\n");
             List<string> s = vocabs.ToList();
             s.Sort();
-          //  var distinctWords = s.Distinct();
             StringBuilder strBuilder=new StringBuilder();
             foreach (string str in s)
             {
                 strBuilder.AppendLine(String.Concat(++wordIndex, "\t", str));
             }
-           // var formatted = vocabs.Select(w => String.Concat(wordIndex++, "\t", w));
             
             System.IO.File.WriteAllText(@"C:\bigdata\vocabulary.txt", strBuilder.toString(), Encoding.UTF8);
             Console.WriteLine("Press any key to exit...");
